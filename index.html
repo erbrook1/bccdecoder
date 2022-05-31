@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>BCC Decoder</h1>
+
+<p></p>
+
+  BCC2 value (0 - V): <input type="text" name="a" maxlength="1" id="a" style="text-transform:uppercase"><br> 
+  BCC3 value (0 - V): <input type="text" name="b" maxlength="1" id="b" style="text-transform:uppercase"><br>
+  <button onclick="calc(document.getElementById('a').value,document.getElementById('b').value)">Calculate</button>
+
+  <script>
+	function calc(a, b) {
+		var bccList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'];    
+		bcc2 = a.toUpperCase();
+		bcc3 = b.toUpperCase();
+		bcc2ndx = bccList.indexOf(bcc2);
+		bcc3ndx = bccList.indexOf(bcc3);
+		results = ""
+		if (bcc2ndx == -1) {
+			results =  "<b>BCC2 must be: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V </b><br>";
+		}
+		if (bcc3ndx == -1) {
+			results = (results + "<b>BCC3 must be: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V </b><br>");
+		}
+		if (results != "") {
+			document.write ("<h1>BCC Decoder Error</h1>" + results);
+		}
+		
+		i1val = 0;
+		i2val = 0;
+		i3val = 0;
+		i4val = 0;
+		i5val = 0;
+		i6val = 0;
+		i7val = 0;
+		i8val = 0;
+		
+		if (bcc2ndx > 15) {
+			i8val = 16;
+		}
+		
+		if ((bcc2ndx - i8val) > 7) {
+			i7val = 8;
+		}
+		if ((bcc2ndx - (i8val + i7val)) > 3) {
+			i6val = 4;
+		}
+		if ((bcc2ndx - (i8val + i7val + i6val)) > 1) {
+			i5val = 2;
+		}
+		if ((bcc2ndx - (i8val + i7val + i6val + i5val)) > 0) {
+			i4val = 1;
+		}
+		if (bcc3ndx > 15) {
+			i3val = 16;
+		}
+		if ((bcc3ndx - i3val) > 7) {
+			i2val = 8;
+		}
+		if ((bcc3ndx - (i3val + i2val)) > 3) {
+			i1val = 4;
+		}
+		
+		function init_insert(x) {
+			if(x > 0) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		i8 = init_insert(i8val);
+		i7 = init_insert(i7val);
+		i6 = init_insert(i6val);
+		i5 = init_insert(i5val);
+		i4 = init_insert(i4val);
+		i3 = init_insert(i3val);
+		i2 = init_insert(i2val);
+		i1 = init_insert(i1val);
+		
+		gates = (i1.toString() + i2.toString() + i3.toString() + i4.toString() + i5.toString() + i6.toString() + i7.toString() + i8.toString());
+		
+		inserts = ""
+		for (let i = 0; i < gates.length; i++) {
+			if (gates[i] == "1") {
+				if (inserts != "") {
+					inserts = (inserts + ",");
+				} 
+				inserts = (inserts + (i + 1));
+			}
+		}
+		if (results == "") {
+			results = ("<h1>BCC Decoder Results</h1> Gates: <b>" + gates + "</b><br>Inserts: <b>" + inserts + "</b>");
+			document.write (results);
+		}
+    }
+  </script>
+
+</body>
+</html>
